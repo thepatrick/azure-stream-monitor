@@ -65,7 +65,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     const liveOutputs = await Promise.all(
       liveEvents.map(async (event) => ({
-        event,
+        event: event.name,
         outputs: await getOutputsForEvent(client, event),
       })),
     );
