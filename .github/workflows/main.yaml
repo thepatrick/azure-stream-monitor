@@ -1,4 +1,4 @@
-name: Backend
+name: Function
 
 on:
   push:
@@ -20,15 +20,13 @@ jobs:
     - name: 'Resolve Project Dependencies Using Npm'
       shell: bash
       run: |
-        pushd './backend'
         npm install
         npm run build --if-present
         npm run test --if-present
-        popd
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
       id: fa
       with:
         app-name: ${{ secrets.BACKEND_FUNCTIONAPP_NAME }}
-        package: backend
+        package: ./
         publish-profile: ${{ secrets.BACKEND_PUBLISH_PROFILE }}
