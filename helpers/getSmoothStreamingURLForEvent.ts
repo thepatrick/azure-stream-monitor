@@ -1,5 +1,5 @@
 import { AzureMediaServices } from '@azure/arm-mediaservices';
-import { accountName, resourceGroup, streamEndpoint } from '../env';
+import { accountName, resourceGroup } from '../env';
 
 type StreamOffline = {
   streaming: 'offline';
@@ -15,6 +15,7 @@ type StreamResponse = StreamOffline | StreamLive;
 
 export const getSmoothStreamingURLForEvent = async (
   client: AzureMediaServices,
+  useStreamEndpoint: string,
   liveEventName: string,
 ): Promise<StreamResponse> => {
   const outputs = await client.liveOutputs.list(resourceGroup, accountName, liveEventName);
@@ -65,7 +66,7 @@ export const getSmoothStreamingURLForEvent = async (
     return { streaming: 'offline', error: new Error('No path found for stream') };
   }
 
-  const streamURL = `${streamEndpoint}${streamPath}`;
+  const streamURL = `${useStreamEndpoint}${streamPath}`;
 
   return { streaming: 'live', streamURL };
 };

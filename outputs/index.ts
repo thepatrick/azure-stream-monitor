@@ -1,4 +1,5 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions';
+import { streamEndpoint } from '../env';
 import { getAMSClient } from '../helpers/getAMSClient';
 import { getSmoothStreamingURLForEvent } from '../helpers/getSmoothStreamingURLForEvent';
 
@@ -32,10 +33,12 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     return;
   }
 
+  const useStreamEndpoint = req.params.streamEndpoint.trim() || streamEndpoint;
+
   try {
     const client = await getAMSClient();
 
-    const streamURL = await getSmoothStreamingURLForEvent(client, liveEventName);
+    const streamURL = await getSmoothStreamingURLForEvent(client, useStreamEndpoint, liveEventName);
 
     if (streamURL.streaming === 'live') {
       context.res = {
