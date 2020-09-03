@@ -33,7 +33,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     return;
   }
 
-  const useStreamEndpoint = req.params.streamEndpoint.trim() || streamEndpoint;
+  const useStreamEndpoint = req.query.streamEndpoint?.trim() || streamEndpoint;
 
   try {
     const client = await getAMSClient();
